@@ -266,7 +266,6 @@ class File
 
     protected function buildZip64ExtraBlock(bool $force = false): string
     {
-
         $fields = [];
         if ($this->len->isOver32($force)) {
             $fields[] = ['P', $this->len];          // Length of original data
@@ -304,7 +303,6 @@ class File
 
     public function addFileFooter(): void
     {
-
         if ($this->bits & self::BIT_ZERO_HEADER) {
             // compressed and uncompressed size
             $sizeFormat = 'V';
@@ -341,7 +339,6 @@ class File
 
     protected function processStreamWithZeroHeader(StreamInterface $stream): void
     {
-        $this->bits |= self::BIT_ZERO_HEADER;
         $this->addFileHeader();
         $this->readStream($stream, self::COMPUTE | self::SEND);
         $this->addFileFooter();
@@ -356,7 +353,7 @@ class File
             $data = $stream->read(self::CHUNKED_READ_BLOCK_SIZE);
             $total += strlen($data);
             if ($size > 0 && $total > $size) {
-                $data = substr($data, 0 , strlen($data)-($total - $size));
+                $data = substr($data, 0, strlen($data)-($total - $size));
             }
             $this->deflateData($stream, $data, $options);
             if ($options & self::SEND) {
